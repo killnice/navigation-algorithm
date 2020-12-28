@@ -1,7 +1,9 @@
 % 方案一 利用角增量构建更新四元数
 x = -0.10*pi/180;
 y = -0.16*pi/180;
-z = -10.01*pi/180; %弧度单位制
+z = -10.01*pi/180; %弧度单位制 初值
+
+
 %注意弧度单位制 注意四元数向量
 q0 = [cos(x/2)*cos(y/2)*cos(z/2) + sin(x/2)*sin(y/2)*sin(z/2)
       sin(x/2)*cos(y/2)*cos(z/2) - cos(x/2)*sin(y/2)*sin(z/2)
@@ -14,11 +16,11 @@ time_temp = char(b(:,1));% 提取时间戳字符串 -->cell转char
 time_list = [];%存储时间戳 t
 dt_list = []; %存储时间戳的差分 dt
 w_list = A.data(:,7:9)*pi/180 ;%存储陀螺仪角速度计测量值 w
-for i = 2:length(time_temp) 
+for i = 2:length(time_temp) %原来数据文件中的时间是字符串，需要转成double类型
     time_list = [time_list ; str2double(time_temp(i,8:end))];
 end
 
-for i = 2:length(time_list)
+for i = 2:length(time_list)%存储时间戳和dt
     dt_list = [dt_list ;time_list(i)- time_list(i-1)];
 end
 Q= q0;
@@ -46,7 +48,6 @@ end
 
 
 % 方案二 根据四元数微分方程直接进行数值求解
-
 
 I = eye(4);
 Q_one = q0.';
